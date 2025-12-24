@@ -19,10 +19,9 @@ let is_invalid num =
   let rec sub_is_invalid sub =
     match sub with
     | [] -> false
+    | _ :: [] -> true
     | sub :: rest ->
-        if List.length rest = 0 then true
-        else if String.equal sub (List.hd rest) then sub_is_invalid rest
-        else false
+        if String.equal sub (List.hd rest) then sub_is_invalid rest else false
   in
 
   let is_match =
