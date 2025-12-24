@@ -1,13 +1,35 @@
-let puzzle_text = In_channel.with_open_text "input.txt" In_channel.input_all
+let puzzle_text =
+  In_channel.with_open_text "input.txt" In_channel.input_all |> String.trim
+
+let rec all_subs ?(init = 1) str =
+  let rec subs_of_len len str =
+    if String.length str mod len <> 0 then []
+    else if String.length str = 0 then []
+    else
+      let sub = String.sub str 0 len in
+      sub :: subs_of_len len (String.sub str len (String.length str - len))
+  in
+
+  if init > String.length str / 2 then []
+  else subs_of_len init str :: all_subs ~init:(init + 1) str
 
 let is_invalid num =
-  let string_val = string_of_int num in
-  let length = String.length string_val in
-  if length mod 2 <> 0 then false
-  else
-    String.equal
-      (String.sub string_val 0 (length / 2))
-      (String.sub string_val (length / 2) (length / 2))
+  let str = string_of_int num in
+  let all_subs = all_subs str in
+  let rec sub_is_invalid sub =
+    match sub with
+    | [] -> false
+    | sub :: rest ->
+        if List.length rest = 0 then true
+        else if String.equal sub (List.hd rest) then sub_is_invalid rest
+        else false
+  in
+
+  let is_match =
+    List.map sub_is_invalid all_subs |> List.exists (fun x -> x == true)
+  in
+  let () = if is_match then print_endline ("Match: " ^ str) else () in
+  is_match
 
 let rec invalid_in_range ?(accum = 0) (start : int) (ends : int) : int =
   if start > ends then accum
