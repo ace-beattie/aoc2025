@@ -26,7 +26,7 @@ let is_invalid num =
   in
 
   let is_match =
-    List.map sub_is_invalid all_subs |> List.exists (fun x -> x == true)
+    List.map sub_is_invalid all_subs |> List.exists (fun x -> x = true)
   in
   let () = if is_match then print_endline ("Match: " ^ str) else () in
   is_match

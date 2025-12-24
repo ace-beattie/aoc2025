@@ -15,12 +15,12 @@ let rec solve_puzzle (lines : string list) (curr : int) (acc : int) : int =
       in
       (* Extract distance from instruction *)
       let new_location =
-        (if line.[0] == 'R' then curr + distance else curr - distance) mod 100
+        (if line.[0] = 'R' then curr + distance else curr - distance) mod 100
       in
       (* Update current location after instruction *)
       solve_puzzle rest new_location
         (acc
-        + (distance + if line.[0] == 'R' || curr == 0 then curr else 100 - curr)
+        + (distance + if line.[0] = 'R' || curr = 0 then curr else 100 - curr)
           / 100)
 
 let result = solve_puzzle instructions 50 0
